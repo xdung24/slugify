@@ -21,28 +21,28 @@ jobs:
             compiler: gcc -m32
             name: linux-x86
           - os: ubuntu-latest
-            arch: amd64
+            arch: x64
             compiler: gcc
-            name: linux-amd64
+            name: linux-x64
           - os: ubuntu-latest
-            arch: armhf
+            arch: armv7
             compiler: arm-linux-gnueabihf-gcc
-            name: linux-armhf
+            name: linux-armv7
           - os: ubuntu-latest
-            arch: aarch64
+            arch: arm64
             compiler: aarch64-linux-gnu-gcc
-            name: linux-aarch64
+            name: linux-arm64
           - os: windows-latest
-            arch: amd64
+            arch: x64
             compiler: cl
-            name: windows-amd64
+            name: windows-x64
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install cross-compilers (Linux)
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && (matrix.arch == 'armv7' || matrix.arch == 'arm64')
         run: sudo apt-get update && sudo apt-get install -y gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
 
       - name: Setup MSVC
@@ -52,7 +52,7 @@ jobs:
       - name: Build
         run: |
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            cl main.c anyascii.c /Fe:slugify.exe
+            cl /utf-8 main.c anyascii.c /Fe:slugify.exe
           else
             ${{ matrix.compiler }} main.c anyascii.c -o slugify
           fi
