@@ -145,12 +145,16 @@ jobs:
             mingw-w64-i686-gcc
             mingw-w64-i686-libwinpthread
 
+      - name: Add MSYS2 to PATH
+        run: echo "C:\\msys64\\mingw32\\bin" >> $GITHUB_PATH
+        shell: bash
+
       - name: Setup Nim
         uses: jiro4989/setup-nim-action@v2
 
       - name: Build
         run: nim c --cpu:i386 --os:windows --cc:mingw --passC:-fpermissive --passC:-m32 --passL:-m32 --app:console slugify.nim
-        shell: msys2 {0}
+        shell: bash
 
       - name: Rename binary
         run: mv slugify.exe slugify-windows-x86.exe
