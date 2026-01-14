@@ -105,3 +105,56 @@ jobs:
           files: slugify-linux-armv7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  build-windows-x64:
+    runs-on: windows-latest
+    needs: build-linux-arm64
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build
+        run: cl /utf-8 main.c anyascii.c /Fe:slugify.exe
+        shell: bash
+
+      - name: Rename binary
+        run: mv slugify.exe slugify-windows-x64.exe
+        shell: bash
+
+      - name: Upload binary
+        uses: softprops/action-gh-release@v1
+        with:
+          files: slugify-windows-x64.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows-x86:
+    runs-on: windows-latest
+    needs: build-windows-x64
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC (x86)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
+
+      - name: Build
+        run: cl /utf-8 main.c anyascii.c /Fe:slugify.exe
+        shell: bash
+
+      - name: Rename binary
+        run: mv slugify.exe slugify-windows-x86.exe
+        shell: bash
+
+      - name: Upload binary
+        uses: softprops/action-gh-release@v1
+        with:
+          files: slugify-windows-x86.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
