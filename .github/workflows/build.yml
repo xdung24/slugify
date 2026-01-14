@@ -10,6 +10,53 @@ permissions:
   contents: write
 
 jobs:
+  build-linux-x64:
+    runs-on: ubuntu-latest
+    needs: build-linux-x86
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: gcc main.c anyascii.c -o slugify
+        shell: bash
+
+      - name: Rename binary
+        run: mv slugify slugify-linux-x64
+        shell: bash
+
+      - name: Upload binary
+        uses: softprops/action-gh-release@v1
+        with:
+          files: slugify-linux-x64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  build-linux-arm64:
+    runs-on: ubuntu-latest
+    needs: build-linux-armv7
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install cross-compilers (Linux)
+        run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu
+
+      - name: Build
+        run: aarch64-linux-gnu-gcc -static main.c anyascii.c -o slugify
+        shell: bash
+
+      - name: Rename binary
+        run: mv slugify slugify-linux-arm64
+        shell: bash
+
+      - name: Upload binary
+        uses: softprops/action-gh-release@v1
+        with:
+          files: slugify-linux-arm64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build-linux-x86:
     runs-on: ubuntu-latest
     steps:
@@ -31,28 +78,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: slugify-linux-x86
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-linux-x64:
-    runs-on: ubuntu-latest
-    needs: build-linux-x86
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Build
-        run: gcc main.c anyascii.c -o slugify
-        shell: bash
-
-      - name: Rename binary
-        run: mv slugify slugify-linux-x64
-        shell: bash
-
-      - name: Upload binary
-        uses: softprops/action-gh-release@v1
-        with:
-          files: slugify-linux-x64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -78,30 +103,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: slugify-linux-armv7
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-linux-arm64:
-    runs-on: ubuntu-latest
-    needs: build-linux-armv7
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install cross-compilers (Linux)
-        run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu
-
-      - name: Build
-        run: aarch64-linux-gnu-gcc -static main.c anyascii.c -o slugify
-        shell: bash
-
-      - name: Rename binary
-        run: mv slugify slugify-linux-arm64
-        shell: bash
-
-      - name: Upload binary
-        uses: softprops/action-gh-release@v1
-        with:
-          files: slugify-linux-arm64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
