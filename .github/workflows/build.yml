@@ -105,3 +105,52 @@ jobs:
           files: slugify-linux-armv7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows-x64:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Nim
+        uses: jiro4989/setup-nim@v1
+
+      - name: Build
+        run: nim c --cpu:amd64 --os:windows slugify.nim
+        shell: bash
+
+      - name: Rename binary
+        run: mv slugify.exe slugify-windows-x64.exe
+        shell: bash
+
+      - name: Upload binary
+        uses: softprops/action-gh-release@v1
+        with:
+          files: slugify-windows-x64.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows-x86:
+    runs-on: windows-latest
+    needs: build-windows-x64
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Nim
+        uses: jiro4989/setup-nim@v1
+
+      - name: Build
+        run: nim c --cpu:i386 --os:windows slugify.nim
+        shell: bash
+
+      - name: Rename binary
+        run: mv slugify.exe slugify-windows-x86.exe
+        shell: bash
+
+      - name: Upload binary
+        uses: softprops/action-gh-release@v1
+        with:
+          files: slugify-windows-x86.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
