@@ -116,7 +116,7 @@ jobs:
         uses: jiro4989/setup-nim-action@v2
 
       - name: Build
-        run: nim c --cc:vcc --cpu:amd64 slugify.nim
+        run: nim c --cpu:amd64 --os:windows --passC:-fpermissive slugify.nim
         shell: bash
 
       - name: Rename binary
@@ -141,7 +141,7 @@ jobs:
         uses: jiro4989/setup-nim-action@v2
 
       - name: Build
-        run: nim c --cc:vcc --cpu:i386 slugify.nim
+        run: nim c --cpu:i386 --os:windows --passC:-fpermissive slugify.nim
         shell: bash
 
       - name: Rename binary
