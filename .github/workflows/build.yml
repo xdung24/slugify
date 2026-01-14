@@ -143,7 +143,7 @@ jobs:
           update: true
           install: >-
             mingw-w64-i686-gcc
-            mingw-w64-i686-pthreads
+            mingw-w64-i686-libwinpthread
 
       - name: Setup Nim
         uses: jiro4989/setup-nim-action@v2
