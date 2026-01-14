@@ -1,0 +1,7 @@
+*.exe
+*.csv
+*.log
+*.tmp
+.vscode/
+node_modules/
+.DS_Store
