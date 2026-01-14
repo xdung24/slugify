@@ -136,12 +136,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup MSYS2 (i686)
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW32
+          update: true
+          install: >-
+            mingw-w64-i686-gcc
+            mingw-w64-i686-pthreads
+
       - name: Setup Nim
         uses: jiro4989/setup-nim-action@v2
 
       - name: Build
-        run: nim c --cpu:i386 --os:windows --passC:-fpermissive --passC:-m32 --app:console slugify.nim
-        shell: bash
+        run: nim c --cpu:i386 --os:windows --cc:mingw --passC:-fpermissive --passC:-m32 --passL:-m32 --app:console slugify.nim
+        shell: msys2 {0}
 
       - name: Rename binary
         run: mv slugify.exe slugify-windows-x86.exe
