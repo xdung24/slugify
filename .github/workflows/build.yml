@@ -17,24 +17,44 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            arch: x86_64
-            cpu: ''
-            name: linux-x86_64
+            arch: x86
+            compiler: gcc -m32
+            name: linux-x86
+          - os: ubuntu-latest
+            arch: amd64
+            compiler: gcc
+            name: linux-amd64
+          - os: ubuntu-latest
+            arch: armhf
+            compiler: arm-linux-gnueabihf-gcc
+            name: linux-armhf
+          - os: ubuntu-latest
+            arch: aarch64
+            compiler: aarch64-linux-gnu-gcc
+            name: linux-aarch64
           - os: windows-latest
-            arch: x86_64
-            cpu: ''
-            name: windows-x86_64
+            arch: amd64
+            compiler: cl
+            name: windows-amd64
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Install cross-compilers (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y gcc-arm-linux-gnueabihf gcc-aarch64-linux-gnu
+
+      - name: Setup MSVC
+        if: matrix.os == 'windows-latest'
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: Build
         run: |
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
             cl main.c anyascii.c /Fe:slugify.exe
           else
-            gcc main.c anyascii.c -o slugify
+            ${{ matrix.compiler }} main.c anyascii.c -o slugify
           fi
         shell: bash
 
