@@ -26,11 +26,11 @@ jobs:
             name: linux-x64
           - os: ubuntu-latest
             arch: armv7
-            compiler: arm-linux-gnueabihf-gcc
+            compiler: arm-linux-gnueabihf-gcc -static
             name: linux-armv7
           - os: ubuntu-latest
             arch: arm64
-            compiler: aarch64-linux-gnu-gcc
+            compiler: aarch64-linux-gnu-gcc -static
             name: linux-arm64
           - os: windows-latest
             arch: x64
