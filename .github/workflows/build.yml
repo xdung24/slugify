@@ -113,7 +113,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Nim
-        uses: jiro4989/setup-nim@v1
+        uses: alaviss/setup-nim@v1
 
       - name: Build
         run: nim c --cpu:amd64 --os:windows slugify.nim
@@ -138,7 +138,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Nim
-        uses: jiro4989/setup-nim@v1
+        uses: alaviss/setup-nim@v1
 
       - name: Build
         run: nim c --cpu:i386 --os:windows slugify.nim
