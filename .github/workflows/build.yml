@@ -153,7 +153,7 @@ jobs:
         uses: jiro4989/setup-nim-action@v2
 
       - name: Build
-        run: nim c --cpu:i386 --os:windows --cc:mingw --passC:-fpermissive --passC:-m32 --passL:-m32 --app:console slugify.nim
+        run: nim c --cpu:i386 --os:windows --cc:gcc --passC:-fpermissive --passC:-m32 --passL:-m32 --app:console slugify.nim
         shell: bash
 
       - name: Rename binary
