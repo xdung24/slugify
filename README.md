@@ -4,7 +4,13 @@ A Nim wrapper for the anyascii C library that provides ASCII transliteration for
 
 ## Building
 
-Compile with Nim:
+### With C (recommended for ease of compilation)
+
+```bash
+gcc main.c anyascii.c -o slugify
+```
+
+### With Nim
 
 ```bash
 nim c slugify.nim

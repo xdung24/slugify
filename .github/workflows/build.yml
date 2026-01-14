@@ -25,11 +25,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Nim
-        uses: jiro4989/setup-nim-action@v1
-
       - name: Build
-        run: nim c ${{ matrix.cpu }} -d:release slugify.nim
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            cl main.c anyascii.c /Fe:slugify.exe
+          else
+            gcc main.c anyascii.c -o slugify
+          fi
+        shell: bash
 
       - name: Rename binary
         run: |
